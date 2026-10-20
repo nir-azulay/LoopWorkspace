@@ -1,0 +1,37 @@
+.github/workflows/build_loop.yml
+  s_bb83162a953b81::t_b918290aeae3a9 11-12
+  s_bb83162a953b81::t_2d770cca9a0d5c 212-217,220-236,239
+.github/workflows/create_certs.yml
+  s_bb83162a953b81::t_6696d92e23ebc0 36-41,44-60,63
+  s_bb83162a953b81::t_3ca091661f59a0 122-144
+  s_bb83162a953b81::t_40cc03584b65e2 14-15
+.github/workflows/add_identifiers.yml
+  s_bb83162a953b81::t_467d435ce235c7 21-26,29-45,48
+  s_bb83162a953b81::t_b915e3c4169b60 64-65
+.github/workflows/build_loop_auto.yml
+  s_bb83162a953b81::t_3ab89c17b94635 240-245,248-264,267
+  s_bb83162a953b81::t_d7702b526774c0 15-16
+Gemfile
+  s_bb83162a953b81::t_d32ea0db27a994 2
+.github/workflows/validate_secrets.yml
+  s_bb83162a953b81::t_ef112b135730cc 117-118
+  s_bb83162a953b81::t_a12f99f7913139 126-148
+Gemfile.lock
+  s_bb83162a953b81::t_3fd257e646c30f 11-12,20-22,24-25,33,40,44,48,50-51,61,66,82-83,94,113,123,125-131,133,138,143,147,156-157,166,175-176,181,186-187,189-190,198,214,218,223,230,233,241-244,265
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.9",
+  "base_commit_sha": "b600b354de375709438f28af04a11a3b70bafac8",
+  "prompts": {},
+  "sessions": {
+    "s_bb83162a953b81": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "c7a0ef3e-8fcb-4b6a-805b-92e9e306ecd1",
+        "model": "grok-4.7"
+      },
+      "human_author": "Nir Azulay <nir.azulay@gmail.com>"
+    }
+  }
+}
