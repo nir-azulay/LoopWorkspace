@@ -168,9 +168,11 @@ jobs:
       contents: write
     if:
       | # builds with manual start; if scheduled: once a month or when new commits are found
-      github.event_name == 'workflow_dispatch' ||
+      success() && (
+        github.event_name == 'workflow_dispatch' ||
         (vars.SCHEDULED_BUILD != 'false' && needs.check_status.outputs.IS_SECOND_IN_MONTH == 'true') ||
         (vars.SCHEDULED_SYNC != 'false' && needs.check_status.outputs.NEW_COMMITS == 'true' )
+      )
     steps:
       - name: Select Xcode version
         run: "sudo xcode-select --switch /Applications/Xcode_27.0.app/Contents/Developer"

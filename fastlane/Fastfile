@@ -212,7 +212,11 @@ platform :ios do
     
     match(
       type: "appstore",
-      force: false,
+      # The build lane runs match in readonly mode, so an expired certificate has
+      # to be replaced here. force recreates profiles so they include the new cert.
+      readonly: false,
+      force: true,
+      renew_expired_certs: true,
       verbose: true,
       git_basic_authorization: Base64.strict_encode64("#{GITHUB_REPOSITORY_OWNER}:#{GH_PAT}"),
       app_identifier: [
@@ -288,26 +292,25 @@ platform :ios do
     # Fetch all certificates
     certificates = Spaceship::ConnectAPI::Certificate.all
 
-    # Filter for Distribution Certificates
-    distribution_certs = certificates.select { |cert| cert.certificate_type == "DISTRIBUTION" }
+    # Apple reports iOS distribution certs as DISTRIBUTION or IOS_DISTRIBUTION.
+    distribution_types = ["DISTRIBUTION", "IOS_DISTRIBUTION"]
+    distribution_certs = certificates.select { |cert| distribution_types.include?(cert.certificate_type) }
+    valid_certs = distribution_certs.select { |cert| Time.parse(cert.expiration_date) > Time.now }
 
-    # Handle case where no distribution certificates are found
+    # Nuke only when no usable distribution certificate remains. An expired cert
+    # can sit beside the one match just created.
     if distribution_certs.empty?
       puts "No Distribution certificates found! Triggering action to create certificate."
       new_certificate_needed = true
-    else
-      # Check for expiration
+    elsif valid_certs.empty?
       distribution_certs.each do |cert|
-        expiration_date = Time.parse(cert.expiration_date)
-
-        puts "Current Distribution Certificate: #{cert.id}, Expiration date: #{expiration_date}"
-
-        if expiration_date < Time.now
-          puts "Distribution Certificate #{cert.id} is expired! Triggering action to renew certificate."
-          new_certificate_needed = true
-        else
-          puts "Distribution certificate #{cert.id} is valid. No action required."
-        end
+        puts "Distribution Certificate #{cert.id} is expired! Expiration date: #{cert.expiration_date}"
+      end
+      puts "Triggering action to renew certificate."
+      new_certificate_needed = true
+    else
+      valid_certs.each do |cert|
+        puts "Distribution certificate #{cert.id} is valid. Expiration date: #{cert.expiration_date}"
       end
     end
 
